@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <p>Child application in a frame</p>
+    <button id='save'>
+      Press the button to pass data to parent application.
+    </button>
+
+    <script
+    charset="utf-8"
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"
+    ></script>
+    <script charset="utf-8">
+    $(document).ready(function() {
+      $(window).on('message', function(event) {
+        var event = event.originalEvent
+        var data = event.data
+        console.log ('Data from parent: ', data)
+
+        if (data.name == "overlay") {
+          console.log("Setting overlay", data.value);
+          window.overlay = data.value
+        }
+      })
+      $('#save').click(function() {
+        var data = {
+          name  : 'save',
+          value : {
+            preview : 'URL Encoded binary data',
+            fabric  : 'Lots of JSON encoded data, including URL encoded binary data',
+            overlay : window.overlay
+          }
+        }
+        window.parent.postMessage(data, '*')
+      })
+    })
+    </script>
+  </body>
+</html>
